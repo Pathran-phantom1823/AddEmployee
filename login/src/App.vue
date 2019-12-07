@@ -1,13 +1,12 @@
 <template>
 <v-app>
-  <v-container>
     <v-app-bar app color="blue" v-if="isLoggedIn" dark>
+      <h1>Employ</h1>
        <v-spacer></v-spacer>
-        <v-btn icon @click="logout">
+        <v-btn icon @click="logout" title="Logout">
         <v-icon>mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
-  </v-container>
     <v-content>
         <router-view />
     </v-content>

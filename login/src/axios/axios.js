@@ -21,7 +21,7 @@ export function createStudent(data) {
                         email: data.email,
                         description: data.description
                 }).then(response => {
-                        alert(response)
+                        window.console.log(response)
                         return response.data
                 })
                 .catch(err => Promise.reject(err.message));

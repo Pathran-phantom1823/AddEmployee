@@ -1,7 +1,7 @@
 <template>
 <div id="background">
     <v-flex justify-center>
-        <h1 class="subtitle-110 text-center">GoEco</h1>
+        <h2 class="subtitle-110 text-center">Employ</h2>
 
         <v-card class="mx-auto card" max-width="400">
             <v-container>
@@ -24,7 +24,7 @@
 </template>
 
 <style>
-h1,
+
 h2 {
     font-weight: normal;
     color: teal;
@@ -35,6 +35,7 @@ h2 {
     flex: 1 1 auto;
     max-width: 100%;
     position: relative;
+    background-image: url('http://www.yellowstoneholding.ch/Content/Image/38391858_ML.jpg');
     background-size: cover;
 }
 .v-application .text-center {
@@ -42,9 +43,7 @@ h2 {
     font-size: 80px;
     color: white;
 }
-.card {
-    margin-top: 1%;
-}
+
 #image {
     width: 40%;
     height: 40%;
@@ -78,7 +77,7 @@ export default {
 		   		let username = this.username 
 		   		let password = this.password
 		   		this.$store.dispatch('login', { username, password })
-		   		.then(() => this.$router.push('/about'))
+		   		.then(() => this.$router.push('/employees'))
 		   		.catch(err => window.console.log(err))
 		   	}
 		}

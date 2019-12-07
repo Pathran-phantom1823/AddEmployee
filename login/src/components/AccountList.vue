@@ -16,23 +16,23 @@
                         <v-card>
                             <v-container>
                                 <v-card-title>
-                                    <span class="headline">Student Profile</span>
+                                    <h1 class="headline">Employee Form</h1>
                                 </v-card-title>
                                 <v-form ref="form" v-model="valid" @submit.prevent="create">
                                     <v-row>
                                         <v-col cols="12" md="4">
-                                            <v-text-field v-model="firstname" :rules="nameRules" label="First Name" required></v-text-field>
+                                            <v-text-field v-model="firstname" prepend-icon="mdi-account" :rules="nameRules" label="First Name" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12" md="4">
-                                            <v-text-field v-model="lastname" :rules="nameRules" label="Last Name" required></v-text-field>
+                                            <v-text-field v-model="lastname" :rules="nameRules" prepend-icon="mdi-account" label="Last Name" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12" md="4">
-                                            <v-text-field v-model="middlename" :rules="nameRules" label="Middle Name" required></v-text-field>
+                                            <v-text-field v-model="middlename" :rules="nameRules" prepend-icon="mdi-account" label="Middle Name" required></v-text-field>
                                         </v-col>
                                     </v-row>
                                     <v-row>
                                         <v-col cols="15" md="6">
-                                            <v-select :items="gender" v-model="gender" label="Gender"></v-select>
+                                            <v-select :items="gender" prepend-icon="mdi-gender-male-female" v-model="gender" label="Gender"></v-select>
                                         </v-col>
                                         <v-col cols="15" md="6">
                                             <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="birthdate" transition="scale-transition" offset-y min-width="290px">
@@ -48,11 +48,11 @@
                                             </v-menu>
                                         </v-col>
                                     </v-row>
-                                    <v-text-field v-model="Address" label="Address" required></v-text-field>
+                                    <v-text-field v-model="Address" prepend-icon="mdi-map-marker" label="Address" required></v-text-field>
 
-                                    <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
+                                    <v-text-field v-model="email" :rules="emailRules" prepend-icon="mdi-email" label="E-mail" required></v-text-field>
 
-                                    <v-textarea v-model="description" label="Description" class="input-group--focused"></v-textarea>
+                                    <v-textarea v-model="description" prepend-icon="mdi-account" label="Description" class="input-group--focused"></v-textarea>
 
                                     <v-card-actions>
                                         <v-spacer />
@@ -175,7 +175,7 @@ export default {
             deleteStudent(student._id)
                 .then(() => {
                     this.$emit('deleteStudent', student._id);
-                    confirm('Are you sure you want to delete this item?') && this.students.splice(index, 1)
+                    confirm('Are you sure you want to delete this employee?') && this.$swal("Deleted", "employee deleted", 'success') && this.students.splice(index, 1)
                 })
                 .catch(err => alert(err.message));
 
@@ -212,17 +212,18 @@ export default {
             }
             createStudent(data)
                 .then(data => {
-                    confirm('Are you sure you want to add this Employee ?') &&
+                    confirm('Are you sure you want to add this Employee ?') && this.$swal("Added", "employee added", 'success') &&
                         this.$emit('createStudent', data.data);
                     getStudents()
                         .then(data => this.students = data.data)
-                        .catch((err => alert(err)));
-                    this.firstname = this.lastname = this.middlename = this.gender = this.birthdate = this.email = this.Address = this.description
+                        .catch((err => window.console.log(err)));
+                    this.firstname = this.lastname = this.middlename = this.gender = this.birthdate = this.email = this.Address = this.description = ""
                     this.dialog = false;
                 })
                 .catch(err => alert(err.message));
         },
         update() {
+           
             window.console.log(this.studentId)
             let data = {
                 firstname: this.firstname,
@@ -236,7 +237,8 @@ export default {
             };
             updateStudent(data, this.studentId)
                 .then(data => {
-                    this.$emit("updateStudent", data.account);
+                    confirm('Are you sure you want to Update this Employee ?') && this.$swal("Updated", "employee updated", 'success') && this.$emit("updateStudent", data.account);
+                    this.firstname = this.lastname = this.middlename = this.gender = this.birthdate = this.email = this.Address = this.description = ""
                     this.dialog = false;
                     getStudents()
                         .then(data => this.students = data.data)
