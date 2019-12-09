@@ -1,83 +1,91 @@
 <template>
-<v-container>
-    <v-data-table :headers="headers" :items="students" :search="search" sort-by="calories" class="elevation-1">
-        <template v-slot:top>
-            <v-toolbar flat color="white">
-                <v-toolbar-title>Employee</v-toolbar-title>
+<div>
+    <v-snackbar v-model="snackbar"  :top="y === 'top'" :timeout="timeout">
+        {{ text }}
+        <v-btn color="blue" text @click="snackbar = false">
+            Close
+        </v-btn>
+    </v-snackbar>
+    <v-container>
+        <v-data-table :headers="headers" :items="students" :search="search" sort-by="calories" class="elevation-1">
+            <template v-slot:top>
+                <v-toolbar flat color="white">
+                    <v-toolbar-title>Employee</v-toolbar-title>
 
-                <v-divider class="mx-4" inset vertical></v-divider>
-                <v-spacer></v-spacer>
-                <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
-                <v-row justify="center">
-                    <v-dialog v-model="dialog" persistent max-width="600px">
-                        <template v-slot:activator="{ on }">
-                            <v-btn color="blue" dark v-on="on">AddEmployee</v-btn>
-                        </template>
-                        <v-card>
-                            <v-container>
-                                <v-card-title>
-                                    <h1 class="headline">Employee Form</h1>
-                                </v-card-title>
-                                <v-form ref="form" v-model="valid" @submit.prevent="create">
-                                    <v-row>
-                                        <v-col cols="12" md="4">
-                                            <v-text-field v-model="firstname" prepend-icon="mdi-account" :rules="nameRules" label="First Name" required></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" md="4">
-                                            <v-text-field v-model="lastname" :rules="nameRules" prepend-icon="mdi-account" label="Last Name" required></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" md="4">
-                                            <v-text-field v-model="middlename" :rules="nameRules" prepend-icon="mdi-account" label="Middle Name" required></v-text-field>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col cols="15" md="6">
-                                            <v-select :items="gender" prepend-icon="mdi-gender-male-female" v-model="gender" label="Gender"></v-select>
-                                        </v-col>
-                                        <v-col cols="15" md="6">
-                                            <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="birthdate" transition="scale-transition" offset-y min-width="290px">
-                                                <!-- For picking the date on the calendar -->
-                                                <template v-slot:activator="{ on }">
-                                                    <v-text-field v-model="birthdate" label="Pick a Date" prepend-icon="mdi-calendar" readonly v-on="on"></v-text-field>
-                                                </template>
-                                                <v-date-picker v-model="birthdate" no-title scrollable>
-                                                    <v-spacer></v-spacer>
-                                                    <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                                                    <v-btn text color="primary" @click="$refs.menu.save(birthdate)">OK</v-btn>
-                                                </v-date-picker>
-                                            </v-menu>
-                                        </v-col>
-                                    </v-row>
-                                    <v-text-field v-model="Address" prepend-icon="mdi-map-marker" label="Address" required></v-text-field>
+                    <v-divider class="mx-4" inset vertical></v-divider>
+                    <v-spacer></v-spacer>
+                    <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
+                    <v-row justify="center">
+                        <v-dialog v-model="dialog" persistent max-width="600px">
+                            <template v-slot:activator="{ on }">
+                                <v-btn color="blue" dark v-on="on">AddEmployee</v-btn>
+                            </template>
+                            <v-card>
+                                <v-container>
+                                    <v-card-title>
+                                        <h1 class="headline">Employee Form</h1>
+                                    </v-card-title>
+                                    <v-form ref="form" v-model="valid" @submit.prevent="create">
+                                        <v-row>
+                                            <v-col cols="12" md="4">
+                                                <v-text-field v-model="firstname" prepend-icon="mdi-account" :rules="nameRules" label="First Name" required></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" md="4">
+                                                <v-text-field v-model="lastname" :rules="nameRules" prepend-icon="mdi-account" label="Last Name" required></v-text-field>
+                                            </v-col>
+                                            <v-col cols="12" md="4">
+                                                <v-text-field v-model="middlename" :rules="nameRules" prepend-icon="mdi-account" label="Middle Name" required></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row>
+                                            <v-col cols="15" md="6">
+                                                <v-select :items="gender" prepend-icon="mdi-gender-male-female" v-model="gender" label="Gender"></v-select>
+                                            </v-col>
+                                            <v-col cols="15" md="6">
+                                                <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="birthdate" transition="scale-transition" offset-y min-width="290px">
+                                                    <!-- For picking the date on the calendar -->
+                                                    <template v-slot:activator="{ on }">
+                                                        <v-text-field v-model="birthdate" label="Pick a Date" prepend-icon="mdi-calendar" readonly v-on="on"></v-text-field>
+                                                    </template>
+                                                    <v-date-picker v-model="birthdate" no-title scrollable>
+                                                        <v-spacer></v-spacer>
+                                                        <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+                                                        <v-btn text color="primary" @click="$refs.menu.save(birthdate)">OK</v-btn>
+                                                    </v-date-picker>
+                                                </v-menu>
+                                            </v-col>
+                                        </v-row>
+                                        <v-text-field v-model="Address" prepend-icon="mdi-map-marker" label="Address" required></v-text-field>
 
-                                    <v-text-field v-model="email" :rules="emailRules" prepend-icon="mdi-email" label="E-mail" required></v-text-field>
+                                        <v-text-field v-model="email" :rules="emailRules" prepend-icon="mdi-email" label="E-mail" required></v-text-field>
 
-                                    <v-textarea v-model="description" prepend-icon="mdi-account" label="Description" class="input-group--focused"></v-textarea>
+                                        <v-textarea v-model="description" prepend-icon="mdi-account" label="Description" class="input-group--focused"></v-textarea>
 
-                                    <v-card-actions>
-                                        <v-spacer />
-                                        <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                                        <v-btn :disabled="!valid" color="success" class="mr-4" @click="formActions">
-                                            Add Account
-                                        </v-btn>
-                                    </v-card-actions>
-                                </v-form>
-                            </v-container>
-                        </v-card>
-                    </v-dialog>
-                </v-row>
-            </v-toolbar>
-        </template>
-        <template v-slot:item.action="{ item }">
-            <v-icon small class="mr-2" @click="editStudent(item)">
-                edit
-            </v-icon>
-            <v-icon small @click="deleteStudent(item)">
-                delete
-            </v-icon>
-        </template>
-    </v-data-table>
-</v-container>
+                                        <v-card-actions>
+                                            <v-spacer />
+                                            <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+                                            <v-btn :disabled="!valid" color="success" class="mr-4" @click="formActions">
+                                                Add Account
+                                            </v-btn>
+                                        </v-card-actions>
+                                    </v-form>
+                                </v-container>
+                            </v-card>
+                        </v-dialog>
+                    </v-row>
+                </v-toolbar>
+            </template>
+            <template v-slot:item.action="{ item }">
+                <v-icon small class="mr-2" @click="editStudent(item)">
+                    edit
+                </v-icon>
+                <v-icon small @click="deleteStudent(item)">
+                    delete
+                </v-icon>
+            </template>
+        </v-data-table>
+    </v-container>
+</div>
 </template>
 
 <script>
@@ -95,6 +103,10 @@ export default {
     name: "AccountList",
     data() {
         return {
+            y: 'top',
+            snackbar: false,
+            text: 'No Changes Has Happen',
+            timeout: 2000,
             add: true,
             search: '',
             students: [],
@@ -135,7 +147,7 @@ export default {
                     sortable: false
                 },
             ],
-            oldData:[],
+            oldData: [],
             studentId: 0,
             menu: false,
             modal: false,
@@ -223,7 +235,6 @@ export default {
                 .catch(err => alert(err.message));
         },
         update() {
-           
             window.console.log(this.studentId)
             let data = {
                 firstname: this.firstname,
@@ -235,15 +246,21 @@ export default {
                 Address: this.Address,
                 description: this.description
             };
+            getStudents()
+                .then(data => this.oldData = data.data)
+                .catch((err => alert(err)));
             updateStudent(data, this.studentId)
                 .then(data => {
-                    confirm('Are you sure you want to Update this Employee ?') && this.$swal("Updated", "employee updated", 'success') && this.$emit("updateStudent", data.account);
-                    this.firstname = this.lastname = this.middlename = this.gender = this.birthdate = this.email = this.Address = this.description = ""
-                    this.dialog = false;
-                    getStudents()
-                        .then(data => this.students = data.data)
-                        .catch((err => alert(err)));
-
+                    if (JSON.stringify(this.oldData) != JSON.stringify(this.students)) {
+                        confirm('Are you sure you want to Update this Employee ?') && this.$swal("Updated", "employee updated", 'success') && this.$emit("updateStudent", data.account);
+                        this.firstname = this.lastname = this.middlename = this.gender = this.birthdate = this.email = this.Address = this.description = ""
+                        this.dialog = false;
+                        getStudents()
+                            .then(data => this.students = data.data)
+                            .catch((err => alert(err)));
+                    } else {
+                        this.snackbar = true
+                    }
                 })
         },
 
